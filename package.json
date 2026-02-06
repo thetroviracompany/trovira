@@ -2,7 +2,7 @@
   "name": "trovira-company",
   "version": "0.0.1",
   "private": true,
-  "homepage": "https://thetroviracompany.github.io/trovira/",
+  "homepage": "https://www.troviracompany.com",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
