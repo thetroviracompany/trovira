@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   FaFacebookF,
@@ -8,14 +8,18 @@ import {
 } from "react-icons/fa";
 import { FiPhone, FiMail } from "react-icons/fi";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
-import logo from "../assets/trovira.png"; // Updated logo path
+import logo from "../assets/trovira.png";
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false); // For mobile dropdown toggle
+  const [servicesOpen, setServicesOpen] = useState(false);
   const location = useLocation();
 
-  // Helper function to highlight active link
+  // Prevent background scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "auto";
+  }, [mobileMenuOpen]);
+
   const isActive = (path: string) =>
     location.pathname === path ? "text-purple-400" : "text-white";
 
@@ -23,7 +27,7 @@ const Header: React.FC = () => {
     <header className="w-full relative z-50">
       {/* ======= TOP BAR ======= */}
       <div className="bg-gradient-to-r from-purple-700 to-purple-500 text-white text-sm">
-        <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-col sm:flex-row justify-between items-center gap-2">
           {/* Social Icons */}
           <div className="flex items-center gap-4">
             <a
@@ -35,7 +39,7 @@ const Header: React.FC = () => {
               <FaFacebookF className="cursor-pointer hover:text-gray-200 transition" />
             </a>
             <a
-              href="https://youtube.com/@thetroviracompany?si=8CWvBMGBEy9KHU_a"
+              href="https://youtube.com/@troviracompany?si=445sXtykizXVAChK"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube"
@@ -51,7 +55,7 @@ const Header: React.FC = () => {
               <FaInstagram className="cursor-pointer hover:text-gray-200 transition" />
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/company/troviracompany"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -61,14 +65,16 @@ const Header: React.FC = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap justify-center sm:justify-end items-center gap-4 sm:gap-6 text-xs sm:text-sm">
             <div className="flex items-center gap-2">
               <FiPhone />
               <span className="font-medium">+91 9370665082</span>
             </div>
             <div className="flex items-center gap-2">
               <FiMail />
-              <span className="font-medium">thetroviracompany@gmail.com</span>
+              <span className="font-medium">
+                thetroviracompany@gmail.com
+              </span>
             </div>
           </div>
         </div>
@@ -76,40 +82,34 @@ const Header: React.FC = () => {
 
       {/* ======= MAIN NAVBAR ======= */}
       <div className="bg-[#0B0B0F] shadow-md">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between relative">
-          {/* === Logo & Brand === */}
-          <Link to="/" className="flex items-center gap-4">
-            <div className="flex items-center justify-center h-16 w-16 rounded-xl bg-white shadow-lg hover:scale-105 transition">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between relative">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3">
+            <div className="flex items-center justify-center h-12 w-12 sm:h-16 sm:w-16 rounded-xl bg-white shadow-lg hover:scale-105 transition">
               <img
                 src={logo}
                 alt="Trovira Logo"
-                className="h-12 w-auto max-w-[120px] object-contain"
+                className="h-10 sm:h-12 w-auto object-contain"
               />
             </div>
             <div className="leading-tight">
               <div className="text-[10px] uppercase tracking-widest text-gray-300 font-medium">
                 The
               </div>
-              <div className="text-xl font-bold text-white tracking-wide">
+              <div className="text-lg sm:text-xl font-bold text-white tracking-wide">
                 Trovira Company
               </div>
-              <div className="text-sm text-gray-400 mt-0.5">
+              <div className="text-xs sm:text-sm text-gray-400 mt-0.5">
                 Building Tech for Global Impact
               </div>
             </div>
           </Link>
 
-          {/* === Desktop Navigation === */}
+          {/* Desktop Nav */}
           <nav className="hidden lg:flex gap-10 font-medium">
-            {/* Home */}
-            <Link
-              to="/"
-              className={`hover:text-purple-400 transition ${isActive("/")}`}
-            >
+            <Link to="/" className={`hover:text-purple-400 transition ${isActive("/")}`}>
               Home
             </Link>
-
-            {/* Company */}
             <Link
               to="/company"
               className={`hover:text-purple-400 transition ${isActive("/company")}`}
@@ -130,11 +130,7 @@ const Header: React.FC = () => {
                 Services <span className="text-xs">▾</span>
               </Link>
 
-              {/* Dropdown Menu */}
-              <div
-                className="absolute top-full left-0 mt-2 w-56 hidden group-hover:block 
-                           bg-[#0B0B0F] text-white rounded-lg shadow-xl z-50 border border-gray-800"
-              >
+              <div className="absolute top-full left-0 mt-2 w-56 hidden group-hover:block bg-[#0B0B0F] text-white rounded-lg shadow-xl z-50 border border-gray-800">
                 {[
                   { to: "/services/software", label: "Software Services" },
                   { to: "/services/ai", label: "AI Services" },
@@ -153,7 +149,6 @@ const Header: React.FC = () => {
               </div>
             </div>
 
-            {/* Products */}
             <Link
               to="/products"
               className={`hover:text-purple-400 transition ${isActive("/products")}`}
@@ -161,7 +156,6 @@ const Header: React.FC = () => {
               Products
             </Link>
 
-            {/* Education */}
             <Link
               to="/education"
               className={`hover:text-purple-400 transition ${isActive("/education")}`}
@@ -170,7 +164,7 @@ const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* === Contact Button (Desktop) === */}
+          {/* Desktop Contact Button */}
           <div className="hidden lg:block">
             <Link
               to="/contact"
@@ -180,7 +174,7 @@ const Header: React.FC = () => {
             </Link>
           </div>
 
-          {/* === Mobile Menu Toggle Button === */}
+          {/* Mobile Menu Button */}
           <div className="lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -195,77 +189,63 @@ const Header: React.FC = () => {
 
       {/* ======= MOBILE MENU ======= */}
       {mobileMenuOpen && (
-        <div
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-95 z-40 flex flex-col px-6 py-10 space-y-6 text-white text-lg overflow-y-auto transition-all duration-300"
-        >
-          {/* Mobile Links */}
-          <Link
-            to="/"
-            className={isActive("/")}
-            onClick={() => setMobileMenuOpen(false)}
-          >
+        <div className="lg:hidden fixed inset-0 bg-black bg-opacity-95 z-[60] flex flex-col px-6 py-10 space-y-6 text-white text-lg overflow-y-auto transition-all duration-300">
+          <Link to="/" onClick={() => setMobileMenuOpen(false)} className={isActive("/")}>
             Home
           </Link>
-
           <Link
             to="/company"
-            className={isActive("/company")}
             onClick={() => setMobileMenuOpen(false)}
+            className={isActive("/company")}
           >
             Company
           </Link>
 
-          {/* Mobile Services Dropdown */}
+          {/* Mobile Dropdown */}
           <div>
             <button
               onClick={() => setServicesOpen(!servicesOpen)}
               className="flex items-center justify-between w-full hover:text-purple-400 transition"
-              aria-expanded={servicesOpen}
             >
               <span>Services</span>
               <span className="text-xs">{servicesOpen ? "▴" : "▾"}</span>
             </button>
-            {servicesOpen && (
-              <div className="ml-4 mt-2 space-y-2 text-gray-300">
+            <div
+              className={`ml-4 mt-2 space-y-2 text-gray-300 transition-all duration-300 ${
+                servicesOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+              }`}
+            >
+              {[
+                { to: "/services/software", label: "Software Services" },
+                { to: "/services/ai", label: "AI Services" },
+                { to: "/services/digital-marketing", label: "Digital Marketing" },
+                { to: "/services/data-analytics", label: "Data Analytics" },
+                { to: "/services/hire-ready-talent", label: "Hire-Ready Talent" },
+              ].map((item) => (
                 <Link
-                  to="/services"
+                  key={item.to}
+                  to={item.to}
                   onClick={() => setMobileMenuOpen(false)}
                   className="block hover:text-purple-400"
                 >
-                  All Services
+                  {item.label}
                 </Link>
-                {[
-                  { to: "/services/software", label: "Software Services" },
-                  { to: "/services/ai", label: "AI Services" },
-                  { to: "/services/digital-marketing", label: "Digital Marketing" },
-                  { to: "/services/data-analytics", label: "Data Analytics" },
-                  { to: "/services/hire-ready-talent", label: "Hire-Ready Talent" },
-                ].map((item) => (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block hover:text-purple-400"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            )}
+              ))}
+            </div>
           </div>
 
           <Link
             to="/products"
-            className={isActive("/products")}
             onClick={() => setMobileMenuOpen(false)}
+            className={isActive("/products")}
           >
             Products
           </Link>
 
           <Link
             to="/education"
-            className={isActive("/education")}
             onClick={() => setMobileMenuOpen(false)}
+            className={isActive("/education")}
           >
             Education
           </Link>

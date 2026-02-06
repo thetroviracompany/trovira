@@ -1,9 +1,12 @@
 // src/pages/services/DigitalMarketing.tsx
 import React from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Added for navigation
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const DigitalMarketing: React.FC = () => {
+  const navigate = useNavigate(); // ✅ React Router navigation
+
   return (
     <div className="min-h-screen flex flex-col bg-[#0B0B0F] text-white">
       {/* ===== Header ===== */}
@@ -107,12 +110,12 @@ const DigitalMarketing: React.FC = () => {
           Partner with us to build a powerful online marketing strategy that drives
           results, strengthens your brand, and engages your audience.
         </p>
-        <a
-          href="/contact"
+        <button
+          onClick={() => navigate("/contact")} // ✅ React Router navigation
           className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-semibold transition"
         >
           Get Started
-        </a>
+        </button>
       </section>
 
       {/* ===== Footer ===== */}
