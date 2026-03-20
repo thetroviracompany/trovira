@@ -4,8 +4,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 
-  // ✅ IMPORTANT: must match your GitHub repo name
-  base: '/trovira/',
+  // ✅ CUSTOM DOMAIN → use root path
+  base: '/',
 
   build: {
     outDir: 'dist',
@@ -28,13 +28,13 @@ export default defineConfig({
     }
   },
 
-  // ✅ dev server config (optional but useful)
+  // ✅ dev server
   server: {
     port: 5173,
     open: true
   },
 
-  // ✅ preview config
+  // ✅ preview
   preview: {
     port: 4173,
     open: true
