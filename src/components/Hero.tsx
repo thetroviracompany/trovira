@@ -49,37 +49,38 @@ export default function Hero() {
     value >= 1000 ? `${(value / 1000).toFixed(0)}k+` : `${value}+`;
 
   return (
-    <section className="relative h-[90vh] sm:h-screen w-full overflow-hidden">
-      {/* Background */}
+    <section className="relative min-h-[90vh] sm:min-h-screen w-full overflow-hidden">
+      {/* ===== Background Image ===== */}
       <div className="absolute inset-0">
         <img
           src="/src/assets/hero-bg.jpg"
           alt="Team working in office"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       </div>
 
-      {/* Floating glows */}
+      {/* ===== Floating Glows ===== */}
       <motion.div
-        className="absolute top-10 left-5 w-40 h-40 sm:w-56 sm:h-56 rounded-full bg-purple-600/30 blur-3xl"
+        className="absolute top-10 left-5 w-28 h-28 sm:w-56 sm:h-56 rounded-full bg-purple-600/30 blur-3xl"
         animate={{ y: [0, 15, -15, 0], scale: [1, 1.1, 1] }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-10 right-5 w-48 h-48 sm:w-72 sm:h-72 rounded-full bg-orange-500/30 blur-3xl"
+        className="absolute bottom-10 right-5 w-32 h-32 sm:w-72 sm:h-72 rounded-full bg-orange-500/30 blur-3xl"
         animate={{ y: [0, -15, 15, 0], scale: [1, 1.05, 1] }}
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Hero Content */}
+      {/* ===== Hero Content ===== */}
       <div className="relative max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-center sm:justify-start">
         <motion.div
-          className="bg-white/10 backdrop-blur-xl p-6 sm:p-10 rounded-3xl w-full max-w-lg sm:max-w-xl shadow-2xl border border-white/20 text-center sm:text-left"
+          className="bg-white/10 backdrop-blur-xl p-6 sm:p-10 rounded-3xl w-[95%] sm:w-auto max-w-lg sm:max-w-xl mx-auto sm:mx-0 shadow-2xl border border-white/20 text-center sm:text-left"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
+          {/* ===== Headline ===== */}
           <motion.h1
             className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight"
             initial={{ opacity: 0, y: -20 }}
@@ -91,6 +92,7 @@ export default function Hero() {
             <span className="text-purple-400">Built for Global Impact</span>
           </motion.h1>
 
+          {/* ===== Subtext ===== */}
           <motion.p
             className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-200"
             initial={{ opacity: 0 }}
@@ -101,7 +103,7 @@ export default function Hero() {
             Partner with Trovira for efficient and impactful technology.
           </motion.p>
 
-          {/* Buttons */}
+          {/* ===== Buttons ===== */}
           <motion.div
             className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-center sm:justify-start gap-4"
             initial={{ opacity: 0, y: 20 }}
@@ -122,10 +124,10 @@ export default function Hero() {
             </a>
           </motion.div>
 
-          {/* Stats */}
+          {/* ===== Stats Section ===== */}
           <motion.div
             ref={statsRef}
-            className="mt-8 sm:mt-10 flex flex-col sm:flex-row justify-center sm:justify-start gap-6 sm:gap-10 text-white"
+            className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-6 sm:gap-10 text-white"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.8 }}

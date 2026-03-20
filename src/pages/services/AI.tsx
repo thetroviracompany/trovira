@@ -1,9 +1,12 @@
 // src/pages/services/AI.tsx
 import React from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Added for navigation
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const AI: React.FC = () => {
+  const navigate = useNavigate(); // ✅ navigation hook
+
   return (
     <div className="min-h-screen flex flex-col bg-[#0B0B0F] text-white">
       {/* ===== Header ===== */}
@@ -105,12 +108,12 @@ const AI: React.FC = () => {
           Let’s transform your business with customized AI applications designed to
           scale, optimize, and innovate.
         </p>
-        <a
-          href="/contact"
+        <button
+          onClick={() => navigate("/contact")} // ✅ React Router navigation
           className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-semibold transition"
         >
           Get in Touch
-        </a>
+        </button>
       </section>
 
       {/* ===== Footer ===== */}

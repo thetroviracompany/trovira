@@ -77,7 +77,7 @@ const Footer = () => {
                 },
                 {
                   Icon: Linkedin,
-                  href: "https://linkedin.com",
+                  href: "https://www.linkedin.com/company/troviracompany",
                 },
               ].map(({ Icon, href }, i) => (
                 <motion.a

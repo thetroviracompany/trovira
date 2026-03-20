@@ -1,9 +1,12 @@
 // src/pages/services/HireReadyTalent.tsx
 import React from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Added for navigation
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const HireReadyTalent: React.FC = () => {
+  const navigate = useNavigate(); // ✅ React Router navigation
+
   return (
     <div className="min-h-screen flex flex-col bg-[#0B0B0F] text-white">
       {/* ===== Header ===== */}
@@ -17,7 +20,7 @@ const HireReadyTalent: React.FC = () => {
         <p className="max-w-3xl text-center text-gray-300 text-lg leading-relaxed mb-10">
           Build your team with top-tier, job-ready talent trained in the latest
           technologies and industry practices. Our hire-ready candidates are
-          vetted, skilled, and ready to make an immediate impact on your projects —
+          vetted, skilled, and ready to make an immediate impact on your projects — 
           helping you scale faster and smarter.
         </p>
       </main>
@@ -108,12 +111,12 @@ const HireReadyTalent: React.FC = () => {
           Partner with us to access pre-trained, industry-ready professionals who
           can accelerate your business growth from day one.
         </p>
-        <a
-          href="/contact"
+        <button
+          onClick={() => navigate("/contact")} // ✅ Navigate to Contact page
           className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-semibold transition"
         >
           Hire Talent Now
-        </a>
+        </button>
       </section>
 
       {/* ===== Footer ===== */}

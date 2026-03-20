@@ -1,9 +1,12 @@
 // src/pages/services/DataAnalytics.tsx
 import React from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Added for navigation
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const DataAnalytics: React.FC = () => {
+  const navigate = useNavigate(); // ✅ React Router navigation
+
   return (
     <div className="min-h-screen flex flex-col bg-[#0B0B0F] text-white">
       {/* ===== Header ===== */}
@@ -108,12 +111,12 @@ const DataAnalytics: React.FC = () => {
           Partner with us to design powerful analytics dashboards and systems
           that turn complex data into clear business intelligence.
         </p>
-        <a
-          href="/contact"
+        <button
+          onClick={() => navigate("/contact")} // ✅ Navigate to contact page
           className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-semibold transition"
         >
           Get Started
-        </a>
+        </button>
       </section>
 
       {/* ===== Footer ===== */}

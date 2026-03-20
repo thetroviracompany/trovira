@@ -1,24 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Added for navigation
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-// Images
+// ===== Images =====
 import aboutImage from "../assets/about.png";
 import heroBg from "../assets/hero-bg.jpg";
 import GD from "../assets/team/gd.png";
 import NS from "../assets/team/ns.png";
 import SG from "../assets/team/SG.jpeg";
+  
 
-/* ---------------------
-  CountUp Component
-  - Animates from 0 -> target when element scrolls into view
-  - Uses requestAnimationFrame + easing
---------------------- */
+/* ========================================================
+   CountUp Component – Animated Counter
+======================================================== */
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 const CountUp: React.FC<{
   target: number;
-  duration?: number; // ms
+  duration?: number;
   suffix?: string;
   formatThousands?: boolean;
 }> = ({ target, duration = 1500, suffix = "+", formatThousands = true }) => {
@@ -31,7 +31,7 @@ const CountUp: React.FC<{
     const node = ref.current;
     if (!node) return;
 
-    const onIntersect = (entries: IntersectionObserverEntry[]) => {
+    const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !startedRef.current) {
         startedRef.current = true;
         const startTime = performance.now();
@@ -42,26 +42,18 @@ const CountUp: React.FC<{
           const eased = easeOutCubic(t);
           const current = Math.floor(eased * target);
           setValue(current);
-          if (t < 1) {
-            rafRef.current = requestAnimationFrame(step);
-          } else {
-            // ensure final value
-            setValue(target);
-            rafRef.current = null;
-          }
+          if (t < 1) rafRef.current = requestAnimationFrame(step);
+          else setValue(target);
         };
 
         rafRef.current = requestAnimationFrame(step);
       }
-    };
+    });
 
-    const obs = new IntersectionObserver(onIntersect, { threshold: 0.2 });
-    obs.observe(node);
-
+    observer.observe(node!);
     return () => {
-      obs.disconnect();
+      observer.disconnect();
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
     };
   }, [target, duration]);
 
@@ -71,14 +63,14 @@ const CountUp: React.FC<{
   return (
     <span ref={ref as any}>
       {display}
-      {value === target && suffix ? suffix : value !== target && suffix ? "" : suffix}
+      {suffix}
     </span>
   );
 };
 
-/* ---------------------
-  Team Card Component
---------------------- */
+/* ========================================================
+   TeamCard Component
+======================================================== */
 const TeamCard = ({
   name,
   role,
@@ -88,39 +80,43 @@ const TeamCard = ({
   role: string;
   avatar: string;
 }) => (
-  <div className="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-2xl transition duration-300 max-w-xs">
+  <div className="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition duration-300 w-full sm:w-72">
     <img
       src={avatar}
       alt={name}
-      className="w-full h-72 mx-auto object-contain rounded-lg border-4 border-purple-200 shadow-md"
+      className="w-full h-64 object-contain rounded-lg border-4 border-purple-200 mx-auto"
     />
-    <h4 className="mt-4 text-xl font-bold text-gray-800">{name}</h4>
-    <p className="text-purple-600 font-medium">{role}</p>
+    <h4 className="mt-4 text-lg sm:text-xl font-bold text-gray-800">{name}</h4>
+    <p className="text-purple-600 font-medium text-sm sm:text-base">{role}</p>
   </div>
 );
 
-/* ---------------------
-  Company Page
---------------------- */
+/* ========================================================
+   Company Page
+======================================================== */
 const Company = () => {
+  const navigate = useNavigate(); // ✅ navigation hook
+
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
-      {/* Header */}
+      {/* ===== Header ===== */}
       <Header />
 
-      {/* Hero Section */}
+      {/* ===== Hero Section ===== */}
       <section
-        className="relative bg-gradient-to-r from-purple-700 to-indigo-700 text-white py-20 text-center"
+        className="relative text-white text-center py-20 sm:py-28"
         style={{
           backgroundImage: `url(${heroBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="bg-black/60 absolute inset-0"></div>
-        <div className="relative z-10 max-w-4xl mx-auto px-6">
-          <h1 className="text-5xl font-bold">The Trovira Company</h1>
-          <p className="mt-6 text-lg leading-relaxed">
+        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
+          <h1 className="text-3xl sm:text-5xl font-bold">
+            The Trovira Company
+          </h1>
+          <p className="mt-5 sm:mt-6 text-base sm:text-lg leading-relaxed text-gray-200">
             Building Tech for Global Impact – Delivering scalable and
             cost-effective technology solutions that transform businesses and
             empower communities.
@@ -128,23 +124,25 @@ const Company = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="max-w-7xl mx-auto py-20 px-6 grid md:grid-cols-2 gap-10 items-center">
+      {/* ===== About Section ===== */}
+      <section className="max-w-7xl mx-auto py-16 sm:py-20 px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <img
           src={aboutImage}
           alt="About Trovira"
-          className="rounded-2xl shadow-lg"
+          className="rounded-2xl shadow-lg w-full h-auto"
         />
         <div>
-          <h2 className="text-3xl font-bold text-purple-700">Who We Are</h2>
-          <p className="mt-6 text-gray-700 leading-relaxed">
+          <h2 className="text-2xl sm:text-3xl font-bold text-purple-700">
+            Who We Are
+          </h2>
+          <p className="mt-6 text-gray-700 text-sm sm:text-base leading-relaxed">
             At Trovira, we specialize in crafting world-class software
             solutions that solve complex problems and create measurable business
             impact. Inspired by innovation and driven by a passion for
             excellence, our mission is to help organizations navigate the
             digital landscape with confidence and speed.
           </p>
-          <p className="mt-4 text-gray-700 leading-relaxed">
+          <p className="mt-4 text-gray-700 text-sm sm:text-base leading-relaxed">
             From enterprise software to AI-powered tools, Trovira has become a
             trusted partner for startups, SMEs, and large corporations seeking
             future-ready solutions.
@@ -152,117 +150,110 @@ const Company = () => {
         </div>
       </section>
 
-      {/* Mission, Vision, Values */}
-      <section className="bg-purple-50 py-16">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 px-6">
-          <div className="p-6 bg-white rounded-2xl shadow-lg text-center">
-            <h3 className="text-xl font-semibold text-purple-700">
-              Our Mission
-            </h3>
-            <p className="mt-4 text-gray-600">
-              To empower businesses with cutting-edge software solutions that
-              accelerate growth, innovation, and global impact.
-            </p>
-          </div>
-          <div className="p-6 bg-white rounded-2xl shadow-lg text-center">
-            <h3 className="text-xl font-semibold text-purple-700">
-              Our Vision
-            </h3>
-            <p className="mt-4 text-gray-600">
-              To be a global leader in technology services, transforming
-              industries through sustainable, intelligent digital ecosystems.
-            </p>
-          </div>
-          <div className="p-6 bg-white rounded-2xl shadow-lg text-center">
-            <h3 className="text-xl font-semibold text-purple-700">
-              Our Values
-            </h3>
-            <p className="mt-4 text-gray-600">
-              Innovation, integrity, and a customer-first approach are at the
-              heart of everything we do at Trovira.
-            </p>
-          </div>
+      {/* ===== Mission, Vision, Values ===== */}
+      <section className="bg-purple-50 py-14 sm:py-16">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4 sm:px-6">
+          {[
+            {
+              title: "Our Mission",
+              text: "To empower businesses with cutting-edge software solutions that accelerate growth, innovation, and global impact.",
+            },
+            {
+              title: "Our Vision",
+              text: "To be a global leader in technology services, transforming industries through sustainable, intelligent digital ecosystems.",
+            },
+            {
+              title: "Our Values",
+              text: "Innovation, integrity, and a customer-first approach are at the heart of everything we do at Trovira.",
+            },
+          ].map((card, i) => (
+            <div
+              key={i}
+              className="p-6 bg-white rounded-2xl shadow-md text-center hover:shadow-lg transition"
+            >
+              <h3 className="text-lg sm:text-xl font-semibold text-purple-700">
+                {card.title}
+              </h3>
+              <p className="mt-4 text-gray-600 text-sm sm:text-base">
+                {card.text}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ===== Key Metrics (Animated) ===== */}
-      <section className="py-16 text-center bg-white">
-        <h2 className="text-3xl font-bold text-purple-700">Our Global Reach</h2>
-        <div className="mt-10 max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-4xl font-bold text-purple-700">
-              <CountUp target={120} duration={1400} suffix="+" />
-            </h3>
-            <p className="text-gray-600">Clients Worldwide</p>
-          </div>
-          <div>
-            <h3 className="text-4xl font-bold text-purple-700">
-              <CountUp target={350} duration={1500} suffix="+" />
-            </h3>
-            <p className="text-gray-600">Projects Completed</p>
-          </div>
-          <div>
-            <h3 className="text-4xl font-bold text-purple-700">
-              <CountUp target={10000} duration={1700} suffix="+" />
-            </h3>
-            <p className="text-gray-600">Lives Impacted</p>
-          </div>
-          <div>
-            <h3 className="text-4xl font-bold text-purple-700">
-              <CountUp target={15} duration={1200} suffix="+" />
-            </h3>
-            <p className="text-gray-600">Countries Served</p>
-          </div>
+      {/* ===== Key Metrics ===== */}
+      <section className="py-14 sm:py-16 text-center bg-white">
+        <h2 className="text-2xl sm:text-3xl font-bold text-purple-700">
+          Our Global Reach
+        </h2>
+        <div className="mt-10 max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8 px-4">
+          {[
+            { value: 120, label: "Clients Worldwide" },
+            { value: 350, label: "Projects Completed" },
+            { value: 10000, label: "Lives Impacted" },
+            { value: 15, label: "Countries Served" },
+          ].map((stat, i) => (
+            <div key={i}>
+              <h3 className="text-3xl sm:text-4xl font-bold text-purple-700">
+                <CountUp target={stat.value} />
+              </h3>
+              <p className="text-gray-600 text-sm sm:text-base mt-1">
+                {stat.label}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Services Overview */}
-      <section className="bg-gray-100 py-20">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-purple-700">What We Offer</h2>
-          <p className="mt-4 text-gray-700">
+      {/* ===== Services ===== */}
+      <section className="bg-gray-100 py-16 sm:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-purple-700">
+            What We Offer
+          </h2>
+          <p className="mt-4 text-gray-700 text-sm sm:text-base">
             Our services are designed to support businesses at every stage of
             their digital journey.
           </p>
-          <div className="grid md:grid-cols-3 gap-10 mt-10">
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <h3 className="text-xl font-semibold text-purple-700">
-                Custom Software
-              </h3>
-              <p className="mt-3 text-gray-600">
-                Scalable solutions for enterprises and startups, tailored to
-                meet unique business needs.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <h3 className="text-xl font-semibold text-purple-700">
-                AI & Automation
-              </h3>
-              <p className="mt-3 text-gray-600">
-                Harness the power of artificial intelligence to streamline
-                processes and boost efficiency.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <h3 className="text-xl font-semibold text-purple-700">
-                Cloud Solutions
-              </h3>
-              <p className="mt-3 text-gray-600">
-                Secure, flexible, and future-proof cloud platforms to support
-                your growing business.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10">
+            {[
+              {
+                title: "Custom Software",
+                text: "Scalable solutions for enterprises and startups, tailored to meet unique business needs.",
+              },
+              {
+                title: "AI & Automation",
+                text: "Harness the power of artificial intelligence to streamline processes and boost efficiency.",
+              },
+              {
+                title: "Cloud Solutions",
+                text: "Secure, flexible, and future-proof cloud platforms to support your growing business.",
+              },
+            ].map((srv, i) => (
+              <div
+                key={i}
+                className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition"
+              >
+                <h3 className="text-lg sm:text-xl font-semibold text-purple-700">
+                  {srv.title}
+                </h3>
+                <p className="mt-3 text-gray-600 text-sm sm:text-base">
+                  {srv.text}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-purple-700 mb-12">
+      {/* ===== Team Section ===== */}
+      <section className="py-16 sm:py-20 bg-gray-50 text-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-purple-700 mb-10 sm:mb-12">
             Meet the <span className="text-indigo-600">Team</span>
           </h2>
-          <div className="flex justify-center gap-16 flex-wrap">
+          <div className="flex flex-wrap justify-center gap-10 sm:gap-16">
             <TeamCard
               name="Gorakhnath Dongare"
               role="Founder & CEO"
@@ -274,32 +265,32 @@ const Company = () => {
               avatar={NS}
             />
             <TeamCard
-              name="Sanket Gulave"
-              role="CTO"
-              avatar={SG}
-            />
+            name = "Sanket Gulave"
+            role = "CTO"
+            avatar={SG}
+             />
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 text-center">
-        <h2 className="text-3xl font-bold text-purple-700">
+      {/* ===== CTA Section ===== */}
+      <section className="py-16 sm:py-20 text-center px-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-purple-700">
           Ready to Collaborate?
         </h2>
-        <p className="mt-4 text-gray-700">
+        <p className="mt-4 text-gray-700 text-sm sm:text-base">
           Let's create solutions that transform industries and make a global
           impact.
         </p>
-        <a
-          href="/contact"
-          className="mt-6 inline-block bg-purple-700 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-purple-800 transition"
+        <button
+          onClick={() => navigate("/contact")}
+          className="mt-6 inline-block bg-purple-700 text-white px-8 py-3 rounded-xl shadow-md hover:bg-purple-800 transition text-sm sm:text-base"
         >
           Contact Us
-        </a>
+        </button>
       </section>
 
-      {/* Footer */}
+      {/* ===== Footer ===== */}
       <Footer />
     </div>
   );
